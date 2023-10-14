@@ -1,40 +1,17 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const ClanPop = () => {
-
-     const [data, setdata] = useState([]);
   const [clan, setclan] = useState({
     id: "",
     clan_name: "",
   });
 
-  // GET DATA
-  useEffect(() => {
-    fetchdata();
-  }, []);
-
-  const fetchdata = () => {
-    axios
-      .get("http://localhost:4000/clan")
-      .then((response) => {
-        setdata(response.data);
-      })
-      .catch((error) => {
-        console.log("get data", error);
-      });
-  };
-  const navigate = useNavigate();
-
-  // ADD DATA
-  const saveProduct = () => {
+  const saveClan = () => {
     axios
       .post("http://localhost:4000/addclan", { clan_name: clan.clan_name })
       .then((response) => {
         if (response.status === 200) {
-          fetchdata();
         } else {
           console.log("error:", response.data);
         }
@@ -48,11 +25,12 @@ const ClanPop = () => {
     <>
       <button
         type="button"
-        className="btn btn-primary "
+        className="btn text-white"
+        style={{ backgroundColor: "#012970" }}
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
-        ADD+
+        New Clan
       </button>
       <div
         className="modal fade "
@@ -63,8 +41,8 @@ const ClanPop = () => {
       >
         <div className="modal-dialog">
           <div
-            className="modal-content text-white"
-            style={{ backgroundColor: "#263043" }}
+            className="modal-content"
+            style={{ color: "#012970", backgroundColor: "#f6f9ff" }}
           >
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
@@ -86,7 +64,7 @@ const ClanPop = () => {
                   type="text"
                   id="title"
                   placeholder="clan name"
-                  className="form-control text-center"
+                  className="form-control"
                   value={clan.clan_name}
                   onChange={(e) =>
                     setclan({ ...clan, clan_name: e.target.value })
@@ -104,8 +82,9 @@ const ClanPop = () => {
               </button>
               <button
                 type="button"
-                onClick={saveProduct}
+                onClick={saveClan}
                 className="btn btn-primary"
+                data-bs-dismiss="modal"
               >
                 Save
               </button>
@@ -115,6 +94,6 @@ const ClanPop = () => {
       </div>
     </>
   );
-}
+};
 
-export default ClanPop
+export default ClanPop;

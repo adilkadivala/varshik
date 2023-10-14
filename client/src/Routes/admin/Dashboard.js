@@ -7,10 +7,12 @@ const Dashboard = () => {
   return (
     <>
       <Routes>
-        <Route exact path="/admin" element={<>
+        <Route path="/admin" element={
+        <>
         <AdminDashboard />
-
-        </>}></Route>
+          
+        </>
+      }></Route>
       </Routes>
     </>
   );

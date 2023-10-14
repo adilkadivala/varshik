@@ -1,52 +1,51 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 export default function MemPopup() {
   const [data, setData] = useState([]);
-  const [auto_slider, setAuto_slider] = useState({
+  const [member, setMember] = useState({
     id: "",
-    text: "",
-    image: null,
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    joining_date: "",
+    mobile_number: "",
+    clan_id: "" // Ensure clan_id is initially an empty string
   });
 
   useEffect(() => {
-    fetchData();
+    fetchdata();
   }, []);
 
-  const fetchData = () => {
+  const fetchdata = () => {
     axios
-      .get("http://localhost:4000/auto_slider")
+      .get("http://localhost:4000/clan")
       .then((response) => {
         setData(response.data);
       })
       .catch((error) => {
-        console.log("Get Data", error);
+        console.log("get data", error);
       });
   };
 
-  const navigate = useNavigate();
-  
-  const saveProduct = () => {
-    const formData = new FormData();
-    formData.append("id", auto_slider.id);
-    formData.append("text", auto_slider.text);
-    formData.append("image", auto_slider.image);
-  
+  // ADD DATA
+  const saveMember = () => {
     axios
-      .post("http://localhost:4000/auto_slider", formData)
+      .post("http://localhost:4000/addmember", member)
       .then((response) => {
         if (response.status === 200) {
-          fetchData();
-          setAuto_slider({ text: "", image: null });
-          navigate("/dashboard");
+          fetchdata();
         } else {
-          console.log("Error:", response.data); 
+          console.log("Error:", response.data);
         }
       })
       .catch((error) => {
-        console.log("Error:", error);
+        console.error("Error:", error);
       });
+  };
+  
+  const handleClanChange = (e) => {
+    setMember({ ...member, clan_id: e.target.value });
   };
 
   return (
@@ -54,11 +53,12 @@ export default function MemPopup() {
       <div className=" main">
         <button
           type="button"
-          className="product_btn_add"
+          className="btn text-white"
+          style={{ backgroundColor: "#012970" }}
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
         >
-          Add New
+          Add Mem
         </button>
       </div>
       <div
@@ -76,7 +76,7 @@ export default function MemPopup() {
                   className="modal-title fs-5 text-dark"
                   id="exampleModalLabel"
                 >
-                  ADD PRODUCT
+                  ADD MEMBER
                 </h1>
                 <button
                   type="button"
@@ -98,9 +98,27 @@ export default function MemPopup() {
                     type="text"
                     className="form-control"
                     placeholder="Enter id..."
-                    value={auto_slider.id}
+                    value={member.id}
                     onChange={(e) =>
-                      setAuto_slider({ ...auto_slider, id: e.target.value })
+                      setMember({ ...member, id: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
+                  >
+                    {" "}
+                    Clan Name:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter Clan Name..."
+                    value={member.first_name}
+                    onChange={(e) =>
+                      setMember({ ...member, first_name: e.target.value })
                     }
                   />
                 </div>
@@ -116,27 +134,9 @@ export default function MemPopup() {
                     type="text"
                     className="form-control"
                     placeholder="Enter First Name..."
-                    value={auto_slider.text}
+                    value={member.middle_name}
                     onChange={(e) =>
-                      setAuto_slider({ ...auto_slider, text: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="mb-3">
-                  <label
-                    htmlFor="exampleFormControlInput1"
-                    className="form-label"
-                  >
-                    {" "}
-                    Middle Name:
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter Middle Name..."
-                    value={auto_slider.text}
-                    onChange={(e) =>
-                      setAuto_slider({ ...auto_slider, text: e.target.value })
+                      setMember({ ...member, middle_name: e.target.value })
                     }
                   />
                 </div>
@@ -152,9 +152,9 @@ export default function MemPopup() {
                     type="text"
                     className="form-control"
                     placeholder="Enter Last Name..."
-                    value={auto_slider.text}
+                    value={member.last_name}
                     onChange={(e) =>
-                      setAuto_slider({ ...auto_slider, text: e.target.value })
+                      setMember({ ...member, last_name: e.target.value })
                     }
                   />
                 </div>
@@ -170,9 +170,9 @@ export default function MemPopup() {
                     type="number"
                     className="form-control"
                     placeholder="Enter Mobile Number..."
-                    value={auto_slider.text}
+                    value={member.mobile_number}
                     onChange={(e) =>
-                      setAuto_slider({ ...auto_slider, text: e.target.value })
+                      setMember({ ...member, mobile_number: e.target.value })
                     }
                   />
                 </div>
@@ -188,11 +188,27 @@ export default function MemPopup() {
                     type="date"
                     className="form-control"
                     placeholder="Enter Joining Date..."
-                    value={auto_slider.text}
+                    value={member.joining_date}
                     onChange={(e) =>
-                      setAuto_slider({ ...auto_slider, text: e.target.value })
+                      setMember({ ...member, joining_date: e.target.value })
                     }
                   />
+                </div>
+
+                <div className="mt-3">
+                  <select
+                    className="form-select form-select-lg mb-3"
+                    aria-label=".form-select-lg example"
+                    value={member.clan_id}
+                    onChange={handleClanChange}
+                  >
+                    <option value="">Select a Clan</option>
+                    {data.map((clan, index) => (
+                      <option key={index} value={clan.id}>
+                        {clan.clan_name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="modal-footer">
@@ -206,7 +222,8 @@ export default function MemPopup() {
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={saveProduct}
+                  data-bs-dismiss="modal"
+                  onClick={saveMember}
                 >
                   Save{" "}
                 </button>

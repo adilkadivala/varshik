@@ -10,11 +10,11 @@ const Navbar = () => {
       >
         <div className="d-flex align-items-center justify-content-between">
           <a href="" className="logo d-flex align-items-center">
-            <img src="assets/img/logo.png" alt="" />
+            <img src={require("../../../Assets/Images/logo.png")} alt="" />
             <span className="d-none d-lg-block">VARSHIK</span>
           </a>
           <a href="">
-            <i class="fa-solid fa-bars"></i>
+            <i className="fa-solid fa-bars"></i>
           </a>
         </div>
         {/* <!-- End Logo --> */}
@@ -32,7 +32,7 @@ const Navbar = () => {
               title="Enter search keyword"
             />
             <button type="submit" title="Search">
-              <i class="fa-solid fa-magnifying-glass"></i>
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </form>
         </div>
@@ -42,7 +42,7 @@ const Navbar = () => {
           <ul className="d-flex align-items-center">
             <li className="nav-item d-block d-lg-none">
               <a className="nav-link nav-icon search-bar-toggle" href="#">
-              <i class="fa-solid fa-magnifying-glass"></i>
+              <i className="fa-solid fa-magnifying-glass"></i>
               </a>
             </li>
             {/* <!-- End Search Icon--> */}
@@ -91,7 +91,7 @@ const Navbar = () => {
                     className="dropdown-item d-flex align-items-center"
                     href="#"
                   >
-                    <i class="fa-solid fa-gear"></i>
+                    <i className="fa-solid fa-gear"></i>
                     <span>Account Settings</span>
                   </a>
                 </li>
@@ -117,7 +117,7 @@ const Navbar = () => {
                     className="dropdown-item d-flex align-items-center"
                     href="#"
                   >
-                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <i className="fa-solid fa-right-from-bracket"></i>
                     <span>Sign Out</span>
                   </a>
                 </li>

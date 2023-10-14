@@ -8,47 +8,44 @@ const Sidebar = () => {
       <aside id="sidebar" className="sidebar">
         <ul className="sidebar-nav" id="sidebar-nav">
           <li className="nav-item">
-            <a className="nav-link" href="#">
-              
-              <NavLink to="/admin">
-              <i className="fa-solid fa-grip"></i>
+            <NavLink to="/admin">
+              <a className="nav-link" href="#">
+                <i className="fa-solid fa-grip"></i>
                 DashBoard
-              </NavLink>
-
-            </a>
+              </a>
+            </NavLink>
           </li>
           {/* <!-- End Dashboard Nav --> */}
 
-          
           <li className="nav-heading">Pages</li>
 
           <li className="nav-item">
-            <a className="nav-link collapsed" href="#">
-              <NavLink to="/member">
+            <NavLink to="/member">
+              <a className="nav-link collapsed" href="#">
                 <i className="fa-solid fa-user"></i>
                 Add Member
-              </NavLink>
-            </a>
+              </a>
+            </NavLink>
           </li>
 
           <li className="nav-item">
-            <a className="nav-link collapsed" href="#">
-              <NavLink to="/amount">
+            <NavLink to="/amount">
+              <a className="nav-link collapsed" href="#">
                 <i className="fa-solid fa-money-bill-1"></i>
                 Add Amount
-              </NavLink>
-            </a>
+              </a>
+            </NavLink>
           </li>
 
           <li className="nav-item">
-            <a className="nav-link collapsed" href="#">
-              <NavLink to="/clan">
+            <NavLink to="/clan">
+              <a className="nav-link collapsed" href="#">
                 <i className="fa-brands fa-meetup"></i>
                 Add Clan
-              </NavLink>
-            </a>
+              </a>
+            </NavLink>
           </li>
-          
+
           {/* <!-- End Profile Page Nav --> */}
         </ul>
       </aside>

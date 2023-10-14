@@ -1,220 +1,241 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const AmountPop = () => {
-    const [data, setData] = useState([]);
-    const [auto_slider, setAuto_slider] = useState({
-      id: "",
-      text: "",
-      image: null,
-    });
+  const [data, setdata] = useState([]);
+  const [amount, setAmount] = useState({
+    id: "",
+    member_id: "",
+    amount: "",
+    voucher_no: "",
+    book_no: "",
+    payment_date: "",
+    payment_receiver: "",
+    update_date: "",
+  });
   
-    useEffect(() => {
-      fetchData();
-    }, []);
+  // GET DATA
+  useEffect(() => {
+    fetchdata();
+  }, []);
+
+  const fetchdata = () => {
+    axios
+      .get("http://localhost:4000/getmember")
+      .then((response) => {
+        setdata(response.data);
+      })
+      .catch((error) => {
+        console.log("get data", error);
+      });
+  };
+
+  // ADD DATA
+  const saveAmount = () => {
+    axios
+      .post("http://localhost:4000/addamount", amount)
+      .then((response) => {
+        if (response.status === 200) {
+          fetchdata();
+        } else {
+          console.log("Error:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  };
   
-    const fetchData = () => {
-      axios
-        .get("http://localhost:4000/auto_slider")
-        .then((response) => {
-          setData(response.data);
-        })
-        .catch((error) => {
-          console.log("Get Data", error);
-        });
-    };
-  
-    const navigate = useNavigate();
-    
-    const saveProduct = () => {
-      const formData = new FormData();
-      formData.append("id", auto_slider.id);
-      formData.append("text", auto_slider.text);
-      formData.append("image", auto_slider.image);
-    
-      axios
-        .post("http://localhost:4000/auto_slider", formData)
-        .then((response) => {
-          if (response.status === 200) {
-            fetchData();
-            setAuto_slider({ text: "", image: null });
-            navigate("/dashboard");
-          } else {
-            console.log("Error:", response.data); 
-          }
-        })
-        .catch((error) => {
-          console.log("Error:", error);
-        });
-    };
-  
-    return (
-      <>
-        <div className=" main">
-          <button
-            type="button"
-            className="product_btn_add"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-          >
-            Add New
-          </button>
-        </div>
-        <div
-          className="modal fade"
-          id="exampleModal"
-          tabIndex="-1"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
+  return (
+    <>
+      <div className=" main">
+        <button
+          type="button"
+          className="btn text-white"
+          style={{ backgroundColor: "#012970" }}
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
         >
-          <form method="post" action="#">
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h1
-                    className="modal-title fs-5 text-dark"
-                    id="exampleModalLabel"
+          Add Amount
+        </button>
+      </div>
+      <div
+        className="modal fade"
+        id="exampleModal"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <form method="post" action="#">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h1
+                  className="modal-title fs-5 text-dark"
+                  id="exampleModalLabel"
+                >
+                  ADD AMOUNT
+                </h1>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              
+              <div className="modal-body">
+                             
+                <div className="mb-3">
+                  <select
+                    className="form-select form-select-lg mb-3"
+                    aria-label=".form-select-lg example"
+                    value={amount.member_id}
+                    onChange={(e) =>
+                      setAmount({ ...amount, member_id: e.target.value })
+                    }
                   >
-                    ADD PRODUCT
-                  </h1>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
+                    {" "}
+                    MEMBER ID
+                    {data.map((member, index) => (
+                      <option key={index} value={member.id}>
+                        {member.first_name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <div className="modal-body">
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      {" "}
-                      Id:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter id..."
-                      value={auto_slider.id}
-                      onChange={(e) =>
-                        setAuto_slider({ ...auto_slider, id: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      {" "}
-                      First Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter First Name..."
-                      value={auto_slider.text}
-                      onChange={(e) =>
-                        setAuto_slider({ ...auto_slider, text: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      {" "}
-                      Middle Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Middle Name..."
-                      value={auto_slider.text}
-                      onChange={(e) =>
-                        setAuto_slider({ ...auto_slider, text: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      {" "}
-                      Last Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Last Name..."
-                      value={auto_slider.text}
-                      onChange={(e) =>
-                        setAuto_slider({ ...auto_slider, text: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      {" "}
-                      Mobile Number:
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="Enter Mobile Number..."
-                      value={auto_slider.text}
-                      onChange={(e) =>
-                        setAuto_slider({ ...auto_slider, text: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label
-                      htmlFor="exampleFormControlInput1"
-                      className="form-label"
-                    >
-                      {" "}
-                      Joining Date:
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      placeholder="Enter Joining Date..."
-                      value={auto_slider.text}
-                      onChange={(e) =>
-                        setAuto_slider({ ...auto_slider, text: e.target.value })
-                      }
-                    />
-                  </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
+                  >
+                    {" "}
+                    Amount:
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Amount..."
+                    value={amount.amount}
+                    onChange={(e) =>
+                      setAmount({ ...amount, amount: e.target.value })
+                    }
+                  />
                 </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-bs-dismiss="modal"
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
                   >
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={saveProduct}
+                    {" "}
+                    voucher_no:
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Voucher..."
+                    value={amount.voucher_no}
+                    onChange={(e) =>
+                      setAmount({ ...amount, voucher_no: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
                   >
-                    Save{" "}
-                  </button>
+                    {" "}
+                    book_no:
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Book No..."
+                    value={amount.book_no}
+                    onChange={(e) =>
+                      setAmount({ ...amount, book_no: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
+                  >
+                    {" "}
+                    Payment Date:
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    placeholder="Payment Date..."
+                    value={amount.payment_date}
+                    onChange={(e) =>
+                      setAmount({ ...amount, payment_date: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
+                  >
+                    {" "}
+                    payment_receiver:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Payment Receiver..."
+                    value={amount.payment_receiver}
+                    onChange={(e) =>
+                      setAmount({ ...amount, payment_receiver: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="exampleFormControlInput1"
+                    className="form-label"
+                  >
+                    {" "}
+                    update_date:
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    placeholder="Update Date..."
+                    value={amount.update_date}
+                    onChange={(e) =>
+                      setAmount({ ...amount, update_date: e.target.value })
+                    }
+                  />
                 </div>
               </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  data-bs-dismiss="modal"
+                  onClick={saveAmount}
+                >
+                  Save
+                </button>
+              </div>
             </div>
-          </form>
-        </div>
-      </>
-    );
-}
+          </div>
+        </form>
+      </div>
+    </>
+  );
+};
 
-export default AmountPop
+export default AmountPop;
