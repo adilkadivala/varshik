@@ -14,7 +14,6 @@ const getAmountData = async (req, res) => {
 
 const addAmount = async (req, res) => {
   const {
-    
     member_id,
     amount,
     voucher_no,
@@ -60,6 +59,7 @@ const editAmount = async (req, res) => {
   });
 };
 
+// save edit abount
 const saveAmount = (req, res) => {
   const id = req.params.id;
   const {
@@ -96,6 +96,7 @@ const saveAmount = (req, res) => {
   });
 };
 
+// dalet amount
 const deleteAmount = async (req, res) => {
   const id = req.params.id;
   const q = "delete from amount where id = ?";

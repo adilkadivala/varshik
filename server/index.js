@@ -26,5 +26,5 @@ app.use("/",Member);
 
 
 app.listen(4000, () => {
-  console.log("listening");
+  console.log("server started");
 });

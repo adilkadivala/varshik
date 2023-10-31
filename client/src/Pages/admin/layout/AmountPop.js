@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AmountPop = () => {
   const [data, setdata] = useState([]);
   const [amount, setAmount] = useState({
-    id: "",
     member_id: "",
     amount: "",
     voucher_no: "",
@@ -13,11 +14,19 @@ const AmountPop = () => {
     payment_receiver: "",
     update_date: "",
   });
-  
+
   // GET DATA
   useEffect(() => {
     fetchdata();
   }, []);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   const fetchdata = () => {
     axios
@@ -30,24 +39,73 @@ const AmountPop = () => {
       });
   };
 
-  // ADD DATA
+  // ADD DATA && validation 
   const saveAmount = () => {
+
+    if (!amount.member_id) {
+      toast.error("Member Id is required.");
+      return;
+    } else if (!amount.amount) {
+      toast.error("Amount is required.");
+      return;
+    } else if (!amount.voucher_no) {
+      toast.error("Voucher Number is required.");
+      return;
+    } else if (!amount.book_no) {
+      toast.error("Book Number is required.");
+      return;
+    } else if (!amount.payment_date) {
+      toast.error("Payment Date is required.");
+      return;
+    } else if (!amount.payment_receiver) {
+      toast.error("Payment Receiver is required.");
+      return;
+    } else if (!amount.update_date) {
+      toast.error("Update Date is required.");
+      return;
+    }
+
+    
+
     axios
       .post("http://localhost:4000/addamount", amount)
       .then((response) => {
         if (response.status === 200) {
+          setAmount({
+            member_id: "",
+            amount: "",
+            voucher_no: "",
+            book_no: "",
+            payment_date: "",
+            payment_receiver: "",
+            update_date: "",
+          });
+
           fetchdata();
         } else {
           console.log("Error:", response.data);
         }
+        toast.success("Added Succefully");
       })
       .catch((error) => {
-        console.log("Error:", error);
+        toast.error("Sorry! Add Again");
       });
   };
-  
+
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className=" main">
         <button
           type="button"
@@ -83,9 +141,8 @@ const AmountPop = () => {
                   aria-label="Close"
                 ></button>
               </div>
-              
+
               <div className="modal-body">
-                             
                 <div className="mb-3">
                   <select
                     className="form-select form-select-lg mb-3"
@@ -95,8 +152,7 @@ const AmountPop = () => {
                       setAmount({ ...amount, member_id: e.target.value })
                     }
                   >
-                    {" "}
-                    MEMBER ID
+                    <option value="">Member Id</option>
                     {data.map((member, index) => (
                       <option key={index} value={member.id}>
                         {member.first_name}
@@ -104,6 +160,7 @@ const AmountPop = () => {
                     ))}
                   </select>
                 </div>
+
                 <div className="mb-3">
                   <label
                     htmlFor="exampleFormControlInput1"
@@ -122,6 +179,7 @@ const AmountPop = () => {
                     }
                   />
                 </div>
+
                 <div className="mb-3">
                   <label
                     htmlFor="exampleFormControlInput1"
@@ -140,6 +198,7 @@ const AmountPop = () => {
                     }
                   />
                 </div>
+
                 <div className="mb-3">
                   <label
                     htmlFor="exampleFormControlInput1"
@@ -158,6 +217,7 @@ const AmountPop = () => {
                     }
                   />
                 </div>
+
                 <div className="mb-3">
                   <label
                     htmlFor="exampleFormControlInput1"
@@ -172,10 +232,14 @@ const AmountPop = () => {
                     placeholder="Payment Date..."
                     value={amount.payment_date}
                     onChange={(e) =>
-                      setAmount({ ...amount, payment_date: e.target.value })
+                      setAmount({
+                        ...amount,
+                        payment_date: formatDate(e.target.value),
+                      })
                     }
                   />
                 </div>
+
                 <div className="mb-3">
                   <label
                     htmlFor="exampleFormControlInput1"
@@ -194,6 +258,7 @@ const AmountPop = () => {
                     }
                   />
                 </div>
+
                 <div className="mb-3">
                   <label
                     htmlFor="exampleFormControlInput1"
@@ -208,7 +273,10 @@ const AmountPop = () => {
                     placeholder="Update Date..."
                     value={amount.update_date}
                     onChange={(e) =>
-                      setAmount({ ...amount, update_date: e.target.value })
+                      setAmount({
+                        ...amount,
+                        update_date: formatDate(e.target.value),
+                      })
                     }
                   />
                 </div>

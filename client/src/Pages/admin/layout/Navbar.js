@@ -13,9 +13,7 @@ const Navbar = () => {
             <img src={require("../../../Assets/Images/logo.png")} alt="" />
             <span className="d-none d-lg-block">VARSHIK</span>
           </a>
-          <a href="">
-            <i className="fa-solid fa-bars"></i>
-          </a>
+          
         </div>
         {/* <!-- End Logo --> */}
 

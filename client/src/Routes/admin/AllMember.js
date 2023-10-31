@@ -1,17 +1,18 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import AdminDashboard from "../../Pages/admin/pages/AdminDashboard";
+import Member from "../../Pages/admin/pages/Member";
 import "../../Assets/Css/admin/style.css";
 
-const Dashboard = () => {
+const AddMember = () => {
   return (
     <>
       <Routes>
         <Route
-          path="/admin"
+          exact
+          path="/member"
           element={
             <>
-              <AdminDashboard />
+              <Member />
             </>
           }
         ></Route>
@@ -20,4 +21,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AddMember;

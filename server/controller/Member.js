@@ -1,8 +1,13 @@
 const express = require("express");
 const database = require("../DataBase/Connection");
 
+// get data
 const getMemberData = (req, res) => {
-  const sql = "SELECT * FROM member";
+  const sql = `
+  SELECT member.*, clan.clan_name
+  FROM member
+  INNER JOIN clan ON member.clan_id = clan.id;
+`;
   database.query(sql, (err, data) => {
     if (err) {
       console.error("Error executing SQL query:", err);
@@ -12,23 +17,24 @@ const getMemberData = (req, res) => {
   });
 };
 
+// Add Member
 const addMember = async (req, res) => {
   const {
+    sur_name,
     first_name,
-    middle_name,
     last_name,
     joining_date,
     mobile_number,
     clan_id,
   } = req.body;
 
-  console.log("AddMember");
+  // console.log("AddMember");
 
   const q =
-    "INSERT INTO member (first_name, middle_name, last_name, joining_date, mobile_number, clan_id) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO member ( sur_name, first_name, last_name, joining_date, mobile_number, clan_id) VALUES (?, ?, ?, ?, ?, ?)";
   const data = [
+    sur_name,
     first_name,
-    middle_name,
     last_name,
     joining_date,
     mobile_number,
@@ -43,7 +49,7 @@ const addMember = async (req, res) => {
     return res.json({ success: "Member added successfully" });
   });
 };
-
+//  Edit Member
 const editMember = async (req, res) => {
   const id = req.params.id;
   const q = "SELECT * from member where id=?";
@@ -57,28 +63,35 @@ const editMember = async (req, res) => {
     return res.json(data);
   });
 };
-
-// Save Edit Member
+//save edit
 const saveEdit = (req, res) => {
-  console.log("object");
   const id = req.params.id;
-  console.log(id);
-  const { first_name, middle_name, last_name, joining_date, mobile_number } =
-    req.body;
-
-  const sql = `
-    UPDATE member 
-    SET first_name=?, middle_name=?, last_name=?, joining_date=?, mobile_number=?
-    WHERE id = ?`;
-
-  const data = [
+  const {
+    sur_name,
     first_name,
-    middle_name,
     last_name,
     joining_date,
     mobile_number,
+    clan_id,
+  } = req.body;
+  console.log('clan_id',clan_id)
+
+  const sql = `
+    UPDATE member 
+    SET sur_name=?, first_name=?, last_name=?, joining_date=?, mobile_number=?, clan_id=?
+    WHERE id = ?`;
+
+  const data = [
+    sur_name,
+    first_name,
+    last_name,
+    joining_date,
+    mobile_number,
+    clan_id,
     id,
   ];
+  // console.log(data);
+
   database.query(sql, data, (err, data) => {
     if (err) {
       console.log(err);
@@ -88,6 +101,7 @@ const saveEdit = (req, res) => {
   });
 };
 
+// delete member
 const deleteMember = async (req, res) => {
   const id = req.params.id;
   const q = "delete from member where id = ?";

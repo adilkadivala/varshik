@@ -1,14 +1,3 @@
-/**
-* Template Name: NiceAdmin
-* Updated: Aug 30 2023 with Bootstrap v5.3.1
-* Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
-/*--------------------------------------------------------------
-# General
---------------------------------------------------------------*/
 :root {
   scroll-behavior: smooth;
 }
@@ -43,7 +32,7 @@ h6 {
 --------------------------------------------------------------*/
 #main {
   margin-top: 60px;
-  padding: 20px 30px;
+  padding: 20px 20px;
   transition: all 0.3s;
 }
 
@@ -605,7 +594,7 @@ h6 {
   width: 300px;
   z-index: 996;
   transition: all 0.3s;
-  padding: 20px;
+  padding: 0px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #aab7cf transparent;
@@ -632,7 +621,7 @@ h6 {
 @media (min-width: 1200px) {
   #main,
   #footer {
-    margin-left: 300px;
+    margin-left: 250px;
   }
 }
 
@@ -666,14 +655,14 @@ h6 {
 }
 
 .sidebar-nav .nav-item {
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 }
 
 .sidebar-nav .nav-heading {
   font-size: 11px;
   text-transform: uppercase;
   color: #899bbd;
-  font-weight: 600;
+  font-weight: 900;
   margin: 10px 0 5px 15px;
 }
 
@@ -684,12 +673,11 @@ h6 {
   font-weight: 600;
   color: #4154f1;
   transition: 0.3;
-  background: #f6f9ff;
-  padding: 10px 15px;
+  padding: 10px 10px;
   border-radius: 4px;
 }
 
-.sidebar-nav .nav-link i {
+.sidebar-nav .nav-item i {
   font-size: 16px;
   margin-right: 10px;
   color: #4154f1;
@@ -697,14 +685,13 @@ h6 {
 
 .sidebar-nav .nav-link.collapsed {
   color: #012970;
-  background: #fff;
 }
 
 .sidebar-nav .nav-link.collapsed i {
   color: #899bbd;
 }
 
-.sidebar-nav .nav-link:hover {
+.sidebar-nav .nav-item:hover {
   color: #4154f1;
   background: #f6f9ff;
 }
@@ -713,46 +700,38 @@ h6 {
   color: #4154f1;
 }
 
-.sidebar-nav .nav-link .bi-chevron-down {
-  margin-right: 0;
-  transition: transform 0.2s ease-in-out;
-}
-
-.sidebar-nav .nav-link:not(.collapsed) .bi-chevron-down {
-  transform: rotate(180deg);
-}
-
-.sidebar-nav .nav-content {
+.sidebar-nav .nav-item {
   padding: 5px 0 0 0;
   margin: 0;
   list-style: none;
 }
 
-.sidebar-nav .nav-content a {
+.sidebar-nav .nav-item a {
   display: flex;
   align-items: center;
   font-size: 14px;
   font-weight: 600;
   color: #012970;
   transition: 0.3;
-  padding: 10px 0 10px 40px;
+  padding: 7px 0 7px 7px;
   transition: 0.3s;
 }
 
-.sidebar-nav .nav-content a i {
-  font-size: 6px;
-  margin-right: 8px;
+.sidebar-nav .nav-item a i {
+  font-size: 16px;
   line-height: 0;
   border-radius: 50%;
 }
 
-.sidebar-nav .nav-content a:hover,
-.sidebar-nav .nav-content a.active {
+.sidebar-nav .nav-item a:hover,
+.sidebar-nav .nav-item a.active {
   color: #4154f1;
+  background: #f6f9ff;
 }
 
-.sidebar-nav .nav-content a.active i {
-  background-color: #4154f1;
+.sidebar-nav .nav-item a.active i {
+  color: #4154f1;
+  
 }
 
 /*--------------------------------------------------------------

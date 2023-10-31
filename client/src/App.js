@@ -1,9 +1,11 @@
 import React from 'react';
 import Dashboard from './Routes/admin/Dashboard';
 import { BrowserRouter } from 'react-router-dom';
-import AddMember from './Routes/admin/AddMember';
-import AddAmount from './Routes/admin/AddAmount';
-import AddClan from './Routes/admin/AddClan';
+import AllMember from './Routes/admin/AllMember';
+import AllAmount from './Routes/admin/AllAmount';
+import AllClan from './Routes/admin/AllClan';
+import AddForm from './Routes/admin/AddForm';
+// import Amountform from './Routes/admin/Amountform';
 
 
 
@@ -12,9 +14,11 @@ const App = () => {
     <>
       <BrowserRouter>
       <Dashboard />
-      <AddMember />
-      <AddAmount />
-      <AddClan />
+      <AddForm />
+      <AllMember />
+      <AllAmount />
+      <AllClan />
+      {/* <Amountform /> */}
       </BrowserRouter>
     </>
   )

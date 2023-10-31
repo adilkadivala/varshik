@@ -1,6 +1,7 @@
 const express = require("express");
 const database = require("../DataBase/Connection");
 
+//get clan data
 const getClanData = async (req, res) => {
   const sql = "SELECT * FROM clan";
   database.query(sql, (err, data) => {
@@ -12,15 +13,9 @@ const getClanData = async (req, res) => {
   });
 };
 
-
-
+// add clan data
 const addClan = async (req, res) => {
-  console.log("ClanAdd");
   const { clan_name } = req.body;
-
-  if (!clan_name || clan_name.trim() === "") {
-    return res.status(400).json({ error: "Clan name is compulsory for save." });
-  }
 
   const checkQuery = "SELECT * FROM clan WHERE clan_name = ?";
   const checkData = [clan_name];
@@ -46,11 +41,8 @@ const addClan = async (req, res) => {
   });
 };
 
-
-
 //edit popup
 const editClan = (req, res) => {
-
   const id = req.params.id;
   const q = "SELECT * from clan where id=?";
   const data = [id];
@@ -62,37 +54,74 @@ const editClan = (req, res) => {
     }
     return res.json(data);
   });
-  
 };
 
 // save Edit
+
+// const saveEdit = (req, res) => {
+//   const id = req.params.id;
+//   const { clan_name } = req.body;
+
+//   if (!clan_name || clan_name.trim() === "") {
+//     return res.status(400).json({ error: "clan_name is required" });
+//   }
+
+//   const sql = "UPDATE clan SET clan_name=? WHERE id=?";
+//   const data = [clan_name, id];
+
+//   console.log("Executing SQL query:", sql, "with data:", data);
+
+//   database.query(sql, data, (err, result) => {
+//     if (err) {
+//       console.error("Error updating record:", err);
+//       return res.status(500).json({ error: "Error updating record" });
+//     }
+
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ error: "Record not found" });
+//     }
+
+//     res.sendStatus(200);
+//   });
+// };
 
 const saveEdit = (req, res) => {
   const id = req.params.id;
   const { clan_name } = req.body;
 
-  
-  if (!clan_name) {
-    return res.status(400).json({ error: "clan_name is required" });
+  if (!clan_name || clan_name.trim() === "") {
+    return res.status(400).json({ error: "Clan name is required" });
   }
-  
 
-  const sql = 'UPDATE clan SET clan_name=? WHERE id=?';
-  const data = [clan_name, id];
+  const checkQuery = "SELECT * FROM clan WHERE clan_name = ? AND id <> ?";
+  const checkData = [clan_name, id];
 
-  console.log("Executing SQL query:", sql, "with data:", data);
-
-  database.query(sql, data, (err, result) => {
-    if (err) {
-      console.error("Error updating record:", err);
-      return res.status(500).json({ error: "Error updating record" });
+  database.query(checkQuery, checkData, (checkErr, checkResult) => {
+    if (checkErr) {
+      return res.status(500).json(checkErr);
     }
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Record not found" });
+    if (checkResult.length > 0) {
+      return res.status(400).json({ error: "This clan name already exists" });
     }
 
-    res.sendStatus(200);
+    const sql = "UPDATE clan SET clan_name=? WHERE id=?";
+    const data = [clan_name, id];
+
+    console.log("Executing SQL query:", sql, "with data:", data);
+
+    database.query(sql, data, (err, result) => {
+      if (err) {
+        console.error("Error updating record:", err);
+        return res.status(500).json({ error: "Error updating record" });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Record not found" });
+      }
+
+      res.sendStatus(200);
+    });
   });
 };
 
@@ -116,9 +145,6 @@ const deleteClan = async (req, res) => {
     console.log("Record deleted successfully");
     return res.json({ message: "Record deleted successfully" });
   });
-
-  
 };
-
 
 module.exports = { getClanData, addClan, editClan, saveEdit, deleteClan };

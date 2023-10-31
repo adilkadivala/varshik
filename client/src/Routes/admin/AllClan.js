@@ -1,17 +1,17 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import AdminDashboard from "../../Pages/admin/pages/AdminDashboard";
-import "../../Assets/Css/admin/style.css";
+import Clan from "../../Pages/admin/pages/Clan";
 
-const Dashboard = () => {
+const AddClan = () => {
   return (
     <>
       <Routes>
         <Route
-          path="/admin"
+          exact
+          path="/clan"
           element={
             <>
-              <AdminDashboard />
+              <Clan />
             </>
           }
         ></Route>
@@ -20,4 +20,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AddClan;
