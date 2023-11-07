@@ -1,6 +1,8 @@
 const express = require("express");
 const database = require("../DataBase/Connection");
 
+
+
 // get data
 const getMemberData = (req, res) => {
   const sql = `
@@ -19,6 +21,7 @@ const getMemberData = (req, res) => {
 
 // Add Member
 const addMember = async (req, res) => {
+  
   const {
     sur_name,
     first_name,
@@ -49,6 +52,7 @@ const addMember = async (req, res) => {
     return res.json({ success: "Member added successfully" });
   });
 };
+
 //  Edit Member
 const editMember = async (req, res) => {
   const id = req.params.id;

@@ -21,7 +21,7 @@ const Sidebar = () => {
               className="bars"
               style={{ paddingLeft: "221px", cursor: "pointer" }}
             >
-              <i class="fas fa-sliders-h" onClick={toggle}></i>
+              <i className="fas fa-sliders-h" onClick={toggle}></i>
             </span>
 
             <div style={{ padding: "10px" }}>
@@ -41,7 +41,7 @@ const Sidebar = () => {
                 <li className="nav-item">
                   <NavLink to="/form">
                     <a className="nav-link collapsed" href="#">
-                      <i class="fa-solid fa-pen-to-square"></i>{" "}
+                      <i className="fa-solid fa-pen-to-square"></i>{" "}
                       {isOpen ? "Form" : null}
                     </a>
                   </NavLink>
@@ -89,7 +89,7 @@ const Sidebar = () => {
                 margin: "10px 0",
               }}
             >
-              <i class="fas fa-sliders-h" onClick={toggle}></i>
+              <i className="fas fa-sliders-h" onClick={toggle}></i>
             </div>
 
             <div style={{ padding: "5px" }}>
@@ -105,7 +105,7 @@ const Sidebar = () => {
                 <li className="nav-item" style={{ margin: "5px" }}>
                   <NavLink to="/form">
                     <a className="nav-link collapsed" href="#">
-                      <i class="fa-solid fa-pen-to-square"></i>{" "}
+                      <i className="fa-solid fa-pen-to-square"></i>{" "}
                     </a>
                   </NavLink>
                 </li>

@@ -10,7 +10,6 @@ const Navbar = () => {
       >
         <div className="d-flex align-items-center justify-content-between">
           <a href="" className="logo d-flex align-items-center">
-            <img src={require("../../../Assets/Images/logo.png")} alt="" />
             <span className="d-none d-lg-block">VARSHIK</span>
           </a>
           
@@ -76,7 +75,7 @@ const Navbar = () => {
                     className="dropdown-item d-flex align-items-center"
                     href="#"
                   >
-                    <i class="fa-solid fa-user"></i>
+                    <i className="fa-solid fa-user"></i>
                     <span>My Profile</span>
                   </a>
                 </li>
@@ -102,7 +101,7 @@ const Navbar = () => {
                     className="dropdown-item d-flex align-items-center"
                     href="#"
                   >
-                    <i class="fa-solid fa-circle-question"></i>
+                    <i className="fa-solid fa-circle-question"></i>
                     <span>Need Help?</span>
                   </a>
                 </li>

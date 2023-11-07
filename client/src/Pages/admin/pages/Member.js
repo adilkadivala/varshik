@@ -4,6 +4,7 @@ import axios from "axios";
 import "../../../Assets/Css/admin/style.css";
 import Container from "../layout/Container";
 import Footer from "../layout/Footer";
+// import ModalPopUp from "../layout/ModalPopUp";
 import { NavLink } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -169,6 +170,28 @@ const Member = ({ isOpen, toggle }) => {
     }
   };
 
+  // dalete popoup..
+
+  // const [showModal, setShowModal] = useState(false);
+
+  // const closeModal = () => setShowModal(false);
+
+  // const handleCloseButton = (
+  //   <button className="model-btn" onClick={closeModal}>
+  //     Accept It
+  //   </button>
+  // );
+
+  // const mainModal = (
+  //   <ModalPopUp closeModal={closeModal} handleCloseButton={handleCloseButton}>
+  //     <h2>STAY TUNED</h2>
+  //     <p>
+  //       Subscribe to our newsletter and never miss our designs ,latest news.etc.
+  //       Our newsletter is sent once a week, every Monday
+  //     </p>
+  //   </ModalPopUp>
+  // );
+
   // Function to handle search
   const handleSearch = (event) => {
     const query = event.target.value;
@@ -296,9 +319,11 @@ const Member = ({ isOpen, toggle }) => {
                         style={{ backgroundColor: "#f72d05" }}
                         type="button"
                         onClick={() => deleteMember(member.id)}
+                        // onClick={() => setShowModal(true)}
                       >
                         Delete
                       </button>
+                      {/* {showModal && mainModal}   */}
 
                       <button
                         type="button"

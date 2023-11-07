@@ -4,13 +4,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Container from "../layout/Container";
 import Footer from "../layout/Footer";
+import { validationSchema, validation } from "../../../middelware/Validation";
 import "../../../Assets/Css/admin/style.css";
 import "../../../Assets/Css/admin/form.css";
 
 const Form = () => {
-  // member form start here
   const [data, setData] = useState([]);
   const [clan, setClan] = useState([]);
+  const [validationErrors, setValidationErrors] = useState([]);
   const [member, setMember] = useState({
     sur_name: "",
     first_name: "",
@@ -20,49 +21,9 @@ const Form = () => {
     clan_id: "",
   });
 
-  // error
-
-  const [errors, setErrors] = useState({
-    sur_name: false,
-    first_name: false,
-    last_name: false,
-  });
-
-  const handleInputChange = (e, fieldName) => {
-    const value = e.target.value;
-    setMember({ ...member, [fieldName]: value });
-  };
-
-  const handleBlur = (fieldName) => {
-    const value = member[fieldName];
-    
-    const isNumeric = /\d/.test(value); // Check for numeric values
-    const isAlphabetic = /^[A-Za-z\s]+$/.test(value); // Check for alphabetic characters and spaces
-  
-    if (isNumeric || !isAlphabetic) {
-      setErrors({ ...errors, [fieldName]: true });
-    } else {
-      setErrors({ ...errors, [fieldName]: false });
-    }
-  };
-  
-
-  // clear form..
-  const handleblank = () => {
-    const blankMember = {
-      sur_name: "",
-      first_name: "",
-      last_name: "",
-      mobile_number: "",
-      joining_date: "",
-      clan_id: "",
-    };
-    setMember(blankMember);
-    toast.info("Cleared Successfully");
-  };
-
   useEffect(() => {
     fetchdata();
+    clandata();
   }, []);
 
   const fetchdata = () => {
@@ -76,12 +37,6 @@ const Form = () => {
       });
   };
 
-  // clan data
-  // edit selector
-  useEffect(() => {
-    clandata();
-  }, []);
-
   const clandata = () => {
     axios
       .get("http://localhost:4000/clan")
@@ -93,57 +48,38 @@ const Form = () => {
       });
   };
 
-  // form validation and saving data
+  const saveMember = async () => {
+    try {
+      const { isValid, errors } = await validation(member);
 
-  const saveMember = () => {
-    if (!member.sur_name) {
-      toast.error("Sur Name is required.");
-      return;
-    } else if (!member.first_name) {
-      toast.error("First Name is required.");
-      return;
-    } else if (!member.last_name) {
-      toast.error("Last Name is required.");
-      return;
-    } else if (member.mobile_number.length < 10) {
-      toast.error("Mobile Number must be at least 10 characters long.");
-      return;
-    } else if (!member.joining_date) {
-      toast.error("Join Date is required.");
-      return;
-    } else if (!member.clan_id) {
-      toast.error("Clan selection is required.");
-      return;
-    }
+      if (isValid) {
+        if (!member.clan_id) {
+          toast.error("Clan Selection is required.");
+          return;
+        }
 
-    const selectClan = clan.find(
-      (clan) => clan.id === parseInt(member.clan_id, 10)
-    );
+        const selectClan = clan.find(
+          (clan) => clan.id === parseInt(member.clan_id, 10)
+        );
 
-    if (!selectClan) {
-      toast.error("Invalid Clan selected.");
-      return;
-    }
+        if (!selectClan) {
+          toast.error("Clan Selection is required.");
+          return;
+        }
 
-    // for small and capitl
-    const makeEasy = member.sur_name.toLowerCase();
-    const easyCompare = selectClan.clan_name.toLowerCase();
+        const makeEasy = member.sur_name.toLowerCase();
+        const easyCompare = selectClan.clan_name.toLowerCase();
 
-    if (makeEasy !== easyCompare) {
-      toast.error("Surname should match the selected Clan.");
-      return;
-    }
+        if (makeEasy !== easyCompare) {
+          toast.error("Surname should match the selected Clan.");
+          return;
+        }
 
-    // just capital
+        const response = await axios.post(
+          "http://localhost:4000/addmember",
+          member
+        );
 
-    // if (member.sur_name !== selectClan.clan_name) {
-    //   toast.error("Surname should match the selected Clan.");
-    //   return;
-    // }
-
-    axios
-      .post("http://localhost:4000/addmember", member)
-      .then((response) => {
         if (response.status === 200) {
           const blankMember = {
             sur_name: "",
@@ -155,19 +91,42 @@ const Form = () => {
           };
           setMember(blankMember);
           fetchdata();
-        } else {
-          console.log("Error:", response.data);
+          toast.success("Added Successfully");
         }
-        toast.success("Added Successfully");
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        toast.warning("Seems, some things went wrong.");
-      });
+      } else if (errors.allFieldsRequired) {
+        toast.error(errors.allFieldsRequired);
+      } else if (errors.sur_name) {
+        toast.error(errors.sur_name);
+      } else if (errors.first_name) {
+        toast.error(errors.first_name);
+      } else if (errors.last_name) {
+        toast.error(errors.last_name);
+      } else if (errors.mobile_number) {
+        toast.error(errors.mobile_number);
+      } else if (errors.joining_date) {
+        toast.error(errors.joining_date);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.warning("Seems, You haven't selected a clan.");
+    }
   };
 
   const handleClanChange = (e) => {
     setMember({ ...member, clan_id: e.target.value });
+  };
+
+  const handleblank = () => {
+    const blankMember = {
+      sur_name: "",
+      first_name: "",
+      last_name: "",
+      mobile_number: "",
+      joining_date: "",
+      clan_id: "",
+    };
+    setMember(blankMember);
+    toast.info("Cleared Successfully");
   };
 
   return (
@@ -191,7 +150,6 @@ const Form = () => {
           <h1>Forms Section</h1>
         </div>
 
-        {/* Member form  */}
         <section className="containerForm">
           <header>Member Form</header>
           <form action="#" className="formBody" name="memberForm">
@@ -203,17 +161,13 @@ const Form = () => {
                     type="text"
                     name="surName"
                     placeholder="Sur Name"
-                    className={`form-control ${errors.sur_name ? "error" : ""}`}
+                    className="form-control"
                     value={member.sur_name}
-                    onChange={(e) => handleInputChange(e, "sur_name")}
-                    onBlur={() => handleBlur("sur_name")}
+                    onChange={(e) =>
+                      setMember({ ...member, sur_name: e.target.value })
+                    }
                     required
                   />
-                  {errors.sur_name && (
-                    <p className="error-message" style={{ color: "red" }}>
-                      Numbers and Special charactors not Allowed.
-                    </p>
-                  )}
                 </div>
 
                 <div className="inputBox">
@@ -222,19 +176,13 @@ const Form = () => {
                     type="text"
                     placeholder="First Name"
                     name="firstName"
-                    className={`form-control ${
-                      errors.first_name ? "error" : ""
-                    }`}
+                    className="form-control"
                     value={member.first_name}
-                    onChange={(e) => handleInputChange(e, "first_name")}
-                    onBlur={() => handleBlur("first_name")}
+                    onChange={(e) =>
+                      setMember({ ...member, first_name: e.target.value })
+                    }
                     required
                   />
-                  {errors.first_name && (
-                    <p className="error-message" style={{ color: "red" }}>
-                       Numbers and Special charactors not Allowed.
-                    </p>
-                  )}
                 </div>
 
                 <div className="inputBox">
@@ -243,26 +191,20 @@ const Form = () => {
                     type="text"
                     name="LastName"
                     placeholder="Last Name"
-                    className={`form-control ${
-                      errors.last_name ? "error" : ""
-                    }`}
+                    className="form-control"
                     value={member.last_name}
-                    onChange={(e) => handleInputChange(e, "last_name")}
-                    onBlur={() => handleBlur("last_name")}
+                    onChange={(e) =>
+                      setMember({ ...member, last_name: e.target.value })
+                    }
                     required
                   />
-                  {errors.last_name && (
-                    <p className="error-message" style={{ color: "red" }}>
-                       Numbers and Special charactors not Allowed.
-                    </p>
-                  )}
                 </div>
               </div>
             </div>
 
             <div className="columnForm">
               <div className="inputBox">
-                <label>Mobile Number</label>
+                <label>Mobile Number*</label>
 
                 <input
                   type="number"
@@ -277,7 +219,7 @@ const Form = () => {
               </div>
 
               <div className="inputBox">
-                <label>Join Date</label>
+                <label>Join Date*</label>
                 <input
                   type="date"
                   className="form-control"
@@ -319,21 +261,10 @@ const Form = () => {
               >
                 Clear
               </button>
-
-
               <button
                 type="button"
                 className="ms-2 btn btn-primary"
                 onClick={saveMember}
-                disabled={
-                  !member.sur_name ||
-                  !member.first_name ||
-                  !member.last_name ||
-                  /\d/.test(member.sur_name) ||
-                  /\d/.test(member.first_name) ||
-                  /\d/.test(member.last_name) ||
-                  !member.clan_id
-                }
               >
                 Submit
               </button>

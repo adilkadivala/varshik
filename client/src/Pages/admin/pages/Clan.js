@@ -214,7 +214,7 @@ const Clan = ({ isOpen, toggle }) => {
                     background: " none",
                   }}
                 >
-                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <i className="fa-solid fa-magnifying-glass"></i>
                 </button>
               </form>
             </div>
